@@ -97,16 +97,9 @@ async function startFetchMyQuery() {
     
     
     dataset.add(items);
-    timeline = new vis.Timeline(container, dataset, options);
+    //timeline = new vis.Timeline(container, dataset, options);
+    setupTimeline(dataset)
 
-    timeline.on('click', function (properties) {
-        console.log(properties.item);
-        var result = items.filter(obj => {
-            return obj.id === properties.item
-        })
-        console.log(result)
-        document.getElementById('details').innerHTML = `<p>Click here for more details: <a href="${result[0].url}">${result[0].content}</a>`;
-    });
 }
 
 function doFilterStuff(filterValue) {
@@ -120,11 +113,26 @@ function doFilterStuff(filterValue) {
         });
     console.log(filtered)
     timeline.destroy()
-    timeline = new vis.Timeline(container, filtered, options);
+    setupTimeline(filtered)
     } else {
         timeline.destroy()
-        timeline = new vis.Timeline(container, dataset, options);
+        setupTimeline(dataset)
+        
     }
+
+}
+
+function setupTimeline(data) {
+    timeline = new vis.Timeline(container, data, options);
+    
+    timeline.on('click', function (properties) {
+        console.log(properties.item);
+        var result = items.filter(obj => {
+            return obj.id === properties.item
+        })
+        console.log(result)
+        document.getElementById('details').innerHTML = `<p>Link more details: <a href="${result[0].url}">${result[0].content}</a>`;
+    });
 
 }
 
